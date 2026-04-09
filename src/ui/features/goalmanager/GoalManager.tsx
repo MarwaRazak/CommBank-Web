@@ -85,16 +85,16 @@ export function GoalManager(props: Props) {
   }
 
   // NEW: when user clicks an emoji, save it and close the picker
-  const onEmojiClick = (emoji: BaseEmoji) => {
+   const pickEmojiOnClick = () => (emoji: BaseEmoji, event: React.MouseEvent) => {
     const selectedEmoji = emoji.native
     setIcon(selectedEmoji)
     setIsPickerOpen(false)
     const updatedGoal: Goal = {
       ...props.goal,
+      icon: emoji.native ?? props.goal.icon,
       name: name ?? props.goal.name,
       targetDate: targetDate ?? props.goal.targetDate,
       targetAmount: targetAmount ?? props.goal.targetAmount,
-      icon: selectedEmoji,
     }
     dispatch(updateGoalRedux(updatedGoal))
     updateGoalApi(props.goal.id, updatedGoal)
@@ -118,7 +118,7 @@ export function GoalManager(props: Props) {
 
       {/* NEW: Emoji picker - only visible when isPickerOpen is true */}
       <EmojiPickerContainer isOpen={isPickerOpen}>
-        <EmojiPicker onClick={onEmojiClick} />
+        <EmojiPicker onClick={pickEmojiOnClick()} />
       </EmojiPickerContainer>
 
       <Group>
